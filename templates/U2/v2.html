@@ -1,0 +1,10 @@
+{{!-- U2 · Section / catalogue, look v2. Hero + stat bar · scope as a sentence · the breakdowns as shape bars (rule 6) · the catalogue
+     (same filter hooks) · agent entry. --}}
+{{> v2-hero}}
+{{> v2-stats}}
+<div class="bento">
+  <section class="siso-section card s2" id="scope">{{> v2-ch sections.scope}}<p class="prose">{{{scope}}}</p></section>
+  <section class="siso-section card" id="counts">{{> v2-ch sections.counts}}{{#if _v2.shape}}<div class="shape">{{#each _v2.shape}}<div><div class="row2"><span>{{label}}</span><div class="seg">{{#each segs}}<i class="{{t}}" style="flex:{{n}};--k:{{k}}" title="{{label}} · {{n}}"></i>{{/each}}</div></div><div class="segl" style="margin-left:0;margin-top:6px">{{#each segs}}<span><i class="{{t}}" style="--k:{{k}}"></i>{{label}} {{n}}</span>{{/each}}</div></div>{{/each}}</div>{{else}}<div class="empty">No breakdown recorded.</div>{{/if}}</section>
+  <section class="siso-section card s3" id="list">{{> v2-ch sections.list}}{{> v2-catalogue catalogue}}</section>
+  <section class="siso-section card s3" id="agent">{{> v2-ch sections.agent}}{{> v2-agent quickstart}}</section>
+</div>

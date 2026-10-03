@@ -1,0 +1,10 @@
+{{!-- v2 · joined stat bar (statistics-card-7, rule 5): label, figure 30 px tabular, the unit as one coloured pill, one muted
+     line; then one activity cell (day bars, the newest lit in the hue). Data: _v2.hero.metrics [{value,label,unit,note,tc,href,title}], _v2.chart --}}
+{{#if _v2.hero.metrics}}<div class="stats{{#if _v2.chart}} has-chart{{/if}}" style="--nstat:{{count _v2.hero.metrics}}">
+{{#each _v2.hero.metrics}}{{#if href}}<a class="stat" href="{{href}}"{{#if title}} title="{{title}}"{{/if}}>{{else}}<div class="stat"{{#if title}} title="{{title}}"{{/if}}>{{/if}}
+  <div class="l">{{label}}</div>
+  <div class="row"><span class="n">{{value}}</span>{{#if unit}}<span class="delta {{tc}}">{{unit}}</span>{{/if}}</div>
+  {{#if note}}<div class="s">{{note}}</div>{{/if}}
+{{#if href}}</a>{{else}}</div>{{/if}}{{/each}}
+{{#with _v2.chart}}<div class="stat"><div class="l">{{label}}</div><div class="p">{{period}}</div><div class="bars">{{#each cells}}<i class="{{#if hot}}hot{{/if}}" style="height:{{h}}%">{{#if hot}}<b>{{v}}</b>{{/if}}</i>{{/each}}</div><div class="blab">{{#each labels}}<span>{{.}}</span>{{/each}}</div></div>{{/with}}
+</div>{{/if}}

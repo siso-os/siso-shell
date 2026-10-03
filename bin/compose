@@ -1,19 +1,25 @@
 #!/usr/bin/env node
-/* bin/compose <family> <data.json> [--nav nav.json] [--base URL] [--current href] [--out page.html]
- * Renders templates/<family>/template.html with the data, inside the SISO CRM shell. Prints HTML to stdout unless --out. */
+/* bin/compose <family> <data.json> [--look v1|v2] [--inline] [--nav nav.json] [--base URL] [--current href] [--out page.html]
+ * Renders templates/<family> with the data, inside the SISO shell. Prints HTML to stdout unless --out.
+ * Look: a family with templates/<id>/v2.html renders v2 unless --look v1, data.meta.look "v1" or SISO_SHELL_LOOK=v1 pins v1.
+ * v2 pages are self-contained (tokens + look inline); --inline also inlines the rail and any relative <img> next to the data.
+ * v2 shows a rail only when one is given (--nav or data.nav); v1 keeps the bank's own nav as its default. */
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
-import { compose, readJSON, ROOT } from './lib/compose.mjs';
+import { compose, lookOf, readJSON, ROOT } from './lib/compose.mjs';
 
 const args = process.argv.slice(2);
 if (args.length < 2 || args.includes('-h') || args.includes('--help')) {
-  console.error('usage: bin/compose <family> <data.json> [--nav nav.json] [--base URL] [--current href] [--out page.html]');
+  console.error('usage: bin/compose <family> <data.json> [--look v1|v2] [--inline] [--nav nav.json] [--base URL] [--current href] [--out page.html]');
   process.exit(args.length < 2 ? 64 : 0);
 }
 const [family, dataPath] = args;
 const opt = (k) => { const i = args.indexOf(k); return i > -1 ? args[i + 1] : undefined; };
 const data = readJSON(resolve(dataPath));
-const nav = opt('--nav') ? readJSON(resolve(opt('--nav'))) : (data.nav || readJSON(resolve(ROOT, 'site', 'nav.json')));
-const html = compose(family, data, { nav, base: opt('--base') ?? '', current: opt('--current') });
-if (opt('--out')) { mkdirSync(dirname(resolve(opt('--out'))), { recursive: true }); writeFileSync(resolve(opt('--out')), html); console.error(`wrote ${opt('--out')} (${html.length} bytes)`); }
+const look = opt('--look');
+if (look && !['v1', 'v2'].includes(look)) { console.error(`compose: --look must be v1 or v2 (got ${look})`); process.exit(64); }
+const v2 = lookOf(family, data, { look }) === 'v2';
+const nav = opt('--nav') ? readJSON(resolve(opt('--nav'))) : (data.nav || (v2 ? false : readJSON(resolve(ROOT, 'site', 'nav.json'))));
+const html = compose(family, data, { nav, look, base: opt('--base') ?? '', current: opt('--current'), inline: args.includes('--inline'), assetDir: dirname(resolve(dataPath)) });
+if (opt('--out')) { mkdirSync(dirname(resolve(opt('--out'))), { recursive: true }); writeFileSync(resolve(opt('--out')), html); console.error(`wrote ${opt('--out')} (${html.length} bytes, look ${v2 ? 'v2' : 'v1'})`); }
 else process.stdout.write(html);

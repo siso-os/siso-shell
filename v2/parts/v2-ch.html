@@ -1,0 +1,2 @@
+{{!-- v2 · card head: icon tile, title (an h2 so the rail's "On this page" still finds it), count, and the section's sub as an i (rule 7). Data: {title, sub, subText, icon, count} --}}
+<div class="ch">{{#if icon}}<span class="ic">{{icon icon}}</span>{{/if}}<h2>{{title}}</h2>{{#if count}}<span class="c">{{count}}</span>{{/if}}{{#if subText}}<i class="info" tabindex="0" data-src="{{subText}}">i</i>{{/if}}</div>

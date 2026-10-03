@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "title": "U24 · Entity page",
+  "description": "One page for any SISO thing: client, agency, industry, project, task, agent, machine, release. Same shape as Agent Base's EntityPage (project pages v2, apps/web/src/components/EntityPage.tsx) so a report page and the in-app page read alike. Hero (crumb, kicker, name, lede, tags, owner capsule, image stage) → joined stat bar (+ one activity chart) → bento of typed cards → one 'Not recorded yet' line. Every card carries its source in `info` (shown behind an i). Values that do not exist are left out and named in `missing`, never shown as 0.",
+  "type": "object",
+  "required": ["meta", "entity"],
+  "properties": {
+    "meta": { "$ref": "U0/schema.json#/$defs/meta" },
+    "entity": {
+      "type": "object",
+      "required": ["kind", "name"],
+      "properties": {
+        "kind": { "enum": ["client", "agency", "industry", "project", "task", "agent", "machine", "release"] },
+        "hue": { "type": "number", "description": "0-360. Omit to hash hue_key (Agent Base projectHue: red/orange/amber are flipped away)." },
+        "hue_key": { "type": "string", "description": "The project name the hue is hashed from (same hash as the Halo faces)." },
+        "state": { "enum": ["working", "needs", "still"], "description": "Paints the hero's bottom rim: working = cyan, needs = amber, still = hue only." },
+        "crumb": { "type": "array", "items": { "type": "object", "properties": { "label": { "type": "string" }, "href": { "type": "string" } } } },
+        "kicker": { "type": "array", "items": { "type": "string" }, "description": "Caps line in the hue, e.g. ['Industry','2 clients','1 live']" },
+        "name": { "type": "string" },
+        "lede": { "type": "string", "description": "One or two sentences. HTML allowed." },
+        "tags": { "type": "array", "items": { "type": "object", "properties": { "label": { "type": "string" }, "tone": { "enum": ["g", "v", "o", "a", "b", "n"] } } } },
+        "owner": {
+          "type": "object",
+          "description": "The capsule. state drives the rim: working spins, needs-shaan breathes amber, else still.",
+          "properties": {
+            "label": { "type": "string", "description": "Default 'Owner'. e.g. 'Assigned to', 'This seat', 'Runs on'." },
+            "name": { "type": "string" },
+            "project": { "type": "string", "description": "Face colour key." },
+            "status": { "enum": ["working", "waiting", "needs-shaan", "blocked", "done", "offline", "vacant"] },
+            "sentence": { "type": "string", "description": "HTML; <b class=w|a|d> colours working / needs / done." },
+            "why": { "type": "string" },
+            "action": { "type": "object", "properties": { "label": { "type": "string" }, "href": { "type": "string" }, "icon": { "type": "string" }, "ghost": { "type": "boolean" } } },
+            "crew": { "type": "array", "items": { "type": "object", "properties": { "name": { "type": "string" }, "project": { "type": "string" }, "status": { "type": "string" } } } },
+            "crew_line": { "type": "string" }
+          }
+        },
+        "stage": {
+          "type": "object",
+          "description": "Right half of the hero. shots[0] is the front browser frame, shots[1] the one behind it. No shots → a hue field with `empty` saying why, or `icon` big.",
+          "properties": {
+            "shots": { "type": "array", "items": { "type": "object", "properties": { "src": { "type": "string" }, "url": { "type": "string" }, "dot": { "enum": ["ok", "gate", "none"] }, "locked": { "type": "string" } } } },
+            "phone": { "type": "string" },
+            "caps": { "type": "array", "items": { "type": "object", "properties": { "label": { "type": "string" }, "dot": { "enum": ["ok", "gate", "none"] }, "off": { "type": "boolean" } } } },
+            "icon": { "type": "string", "description": "lucide name, shown big when there is no image" },
+            "empty": { "type": "string" },
+            "panel": { "type": "object", "description": "Instead of a screenshot: a big glass readout (machine, release, task). {title, lines:[{k,v,tone}]}" }
+          }
+        }
+      }
+    },
+    "stats": {
+      "type": "array",
+      "maxItems": 5,
+      "items": { "type": "object", "properties": { "label": { "type": "string" }, "period": { "type": "string" }, "value": { "type": "string" }, "of": { "type": "string" }, "dim": { "type": "boolean" }, "delta": { "type": "object", "properties": { "label": { "type": "string" }, "tone": { "enum": ["g", "b", "a", "z"] } } }, "line": { "type": "string" }, "info": { "type": "string" } } }
+    },
+    "chart": {
+      "type": "object",
+      "description": "The stat bar's activity cell: day or week bars, `hot` index lit in the hue with its value in a white pill.",
+      "properties": { "label": { "type": "string" }, "period": { "type": "string" }, "values": { "type": "array", "items": { "type": "number" } }, "labels": { "type": "array", "items": { "type": "string" } }, "hot": { "type": "number" }, "info": { "type": "string" } }
+    },
+    "cards": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["type", "title"],
+        "properties": {
+          "type": { "enum": ["work", "tiles", "feat", "timeline", "people", "quote", "chips", "deliv", "lines", "checks", "live"] },
+          "title": { "type": "string" },
+          "icon": { "type": "string" },
+          "count": { "type": ["string", "number"] },
+          "span": { "enum": [1, 2, 3] },
+          "info": { "type": "string", "description": "Where this card's data came from (shown on the i)." },
+          "empty": { "type": "string", "description": "One faint sentence saying what would fill the card." },
+          "work": { "type": "object", "description": "type=work: {value, of, scope, segs:[{state,n}], items:[{id,title,state,href}], more:{n,label,href}}. state: building|tested|allocated|specced|todo|backlog|thought|built|gap|done" },
+          "items": { "type": "array", "description": "tiles: {name,line,img,icon,mono,hue,flag,warn,faces:[{project,status,name}],href} · feat: {icon,title,line,pill,tone,hue,href} · timeline: {at,text,em,hot} · people: {name,line,hue,href,right} · chips: {icon,label,em,href} · deliv: {at,title,line,pill,tone} · lines: HTML strings · checks: {text,done,em} · live: {url,code,line,dot,href}" },
+          "quote": { "type": "object", "description": "type=quote: {text, who, at}" }
+        }
+      }
+    },
+    "missing": { "type": "array", "items": { "type": "string" }, "description": "Fields with no source yet, one quiet line at the foot." }
+  }
+}

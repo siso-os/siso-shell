@@ -1,0 +1,20 @@
+{{!-- U7 · Doc reader / report, look v2. Same data as template.html. Hero + stat bar · the abstract on a lit slab (facts behind an i) ·
+     chapters as calm prose on the canvas with a contents capsule that follows the reader · receipts, limits, related, agent entry as a bento. --}}
+{{> v2-hero}}
+{{> v2-stats}}
+<section class="siso-section abstract" id="abstract">
+  <h2 class="kick" style="margin-bottom:10px">{{sections.abstract.title}}</h2>
+  <p class="ab">{{{abstract.lede}}}</p>
+  {{#if abstract.callout}}<div class="callout2">{{{abstract.callout}}}</div>{{/if}}
+  {{#if abstract.facts}}<details class="srcs"><summary><i class="info">i</i>{{count abstract.facts}} facts about this document</summary>{{#each abstract.facts}}<p><b>{{k}}</b>{{{v}}}</p>{{/each}}</details>{{/if}}
+</section>
+{{#if _v2.chapters}}<div class="read">
+  <div>{{#each _v2.chapters}}<section class="siso-section chap" id="{{id}}"><div class="hd"><span class="n">{{n}}</span><h2>{{title}}</h2>{{#if sub}}<span class="sub">{{{sub}}}</span>{{/if}}</div><div class="doc">{{{html}}}</div></section>{{/each}}</div>
+  <nav class="toc" aria-label="Contents"><span class="k">Contents{{#if contents.from}} · {{contents.from}}{{/if}}</span><ol>{{#each _v2.chapters}}<li><a href="#{{id}}"><span class="n">{{n}}</span><span>{{title}}</span></a>{{#if subs}}<ol>{{#each subs}}<li><a href="{{href}}"><span></span><span>{{label}}</span></a></li>{{/each}}</ol>{{/if}}</li>{{/each}}</ol></nav>
+</div>{{/if}}
+<div class="bento">
+  <section class="siso-section card s2" id="evidence">{{> v2-ch sections.evidence}}{{> v2-receipts evidence}}</section>
+  <section class="card"><div class="ch"><span class="ic">{{icon alert-triangle}}</span><h4>Limits</h4></div>{{> v2-limits evidence}}</section>
+  <section class="siso-section card s3" id="related">{{> v2-ch sections.related}}{{> v2-related related}}</section>
+  <section class="siso-section card s3" id="agent">{{> v2-ch sections.agent}}{{> v2-agent quickstart}}</section>
+</div>

@@ -1,0 +1,12 @@
+{{!-- U16 · Decision, look v2: the call in one lit sentence · his words · what it changed · what reverses it · state · map · timeline. --}}
+{{> v2-hero}}
+{{> v2-stats}}
+<section class="siso-section call" id="decision"><h2 class="k">{{id}} · {{sections.decision.title}}</h2><p>{{{call}}}</p></section>
+<div class="bento dense">
+  <section class="siso-section card s2" id="words">{{> v2-ch sections.words}}{{> v2-words words}}</section>
+  <section class="siso-section card" id="reversal">{{> v2-ch sections.reversal}}<div class="checks"><div class="ck warn"><i></i><div>{{{reverses}}}</div></div></div>{{#if _v2.state}}<div class="tags" style="margin:14px 0 0">{{#each _v2.state}}{{#if href}}<a class="tag {{tc}}" href="{{href}}">{{#if dot}}<i class="dot {{tc}}"></i>{{/if}}{{label}}</a>{{else}}<span class="tag {{tc}}">{{#if dot}}<i class="dot {{tc}}"></i>{{/if}}{{label}}</span>{{/if}}{{/each}}</div>{{/if}}</section>
+  <section class="siso-section card s2" id="effects">{{> v2-ch sections.effects}}{{> v2-contents effects}}</section>
+  <section class="siso-section card" id="timeline">{{> v2-ch sections.timeline}}{{> v2-timeline}}</section>
+  <section class="siso-section card s3" id="map">{{> v2-ch sections.map}}{{> v2-map map}}</section>
+  <section class="siso-section card s3" id="agent">{{> v2-ch sections.agent}}{{> v2-agent quickstart}}</section>
+</div>

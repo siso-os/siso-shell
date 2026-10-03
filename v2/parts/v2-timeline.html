@@ -1,0 +1,5 @@
+{{!-- v2 · what happened: newest first, lane colour on each dot, the newest lit in the hue; "+N earlier". Data: _v2.tl --}}
+{{#if _v2.tl.items}}{{#if _v2.tl.lanes}}<div class="lanes">{{#each _v2.tl.lanes}}<span><i style="--sc:{{sc}}"></i>{{label}}</span>{{/each}}</div>{{/if}}
+<div class="tl">{{#each _v2.tl.items}}<div class="ev{{#if hot}} hot{{/if}}"><time>{{at}}</time><span class="k"><i style="--sc:{{sc}}"></i></span><span>{{#if href}}<a href="{{href}}">{{text}}</a>{{else}}{{text}}{{/if}}</span></div>{{/each}}</div>
+{{#if _v2.tl.more}}<div class="more">+{{_v2.tl.more}} earlier, of {{_v2.tl.total}}</div>{{/if}}
+{{else}}<div class="empty">No dated records in this range.</div>{{/if}}

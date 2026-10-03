@@ -9,12 +9,13 @@ import { cpSync, mkdirSync, writeFileSync, existsSync, readFileSync, rmSync } fr
 import { join } from 'node:path';
 import { compose, ROOT, readJSON } from './lib/compose.mjs';
 import * as D from './lib/data.mjs';
+import { galleryHtml, FAMILIES } from '../v2/gallery.mjs';
 
 const site = join(ROOT, 'site');
 const nav = readJSON(join(site, 'nav.json'));
 const generated = new Date().toISOString();
 const write = (rel, html) => { const f = join(site, rel); mkdirSync(join(f, '..'), { recursive: true }); writeFileSync(f, html); return f; };
-const page = (family, data, current) => compose(family, data, { nav, current, base: '', generated });
+const page = (family, data, current) => compose(family, data, { nav, current, base: '', generated, look: 'v1' });
 
 // derived example data → templates/<id>/example.json (so the folder is self-describing)
 const DERIVED = { U0: D.shellData, U13: D.partsData, U23: D.galleryData };
@@ -33,7 +34,7 @@ for (const id of D.ORDER) {
 }
 
 // clean generated output (keep nav.json, templates.json, receipts)
-for (const d of ['t', 'how', 'shell', 'parts']) rmSync(join(site, d), { recursive: true, force: true });
+for (const d of ['t', 'how', 'shell', 'parts', 'v2']) rmSync(join(site, d), { recursive: true, force: true });
 cpSync(join(ROOT, 'shell'), join(site, 'shell'), { recursive: true });
 // Pages publish helper allows .js, not .mjs; the browser never loads icons (they are inlined at compose time), the copy is for consumers.
 rmSync(join(site, 'shell', 'icons.mjs')); cpSync(join(ROOT, 'shell', 'icons.mjs'), join(site, 'shell', 'icons.js'));
@@ -59,5 +60,15 @@ for (const id of D.ORDER) {
   if (existsSync(exampleFile)) cpSync(exampleFile, join(site, 't', id, 'example.json'));
   if (existsSync(schemaFile)) cpSync(schemaFile, join(site, 't', id, 'schema.json'));
 }
+// look v2 (templates-v2): every family with a v2.html renders its example in v2 at /t/<id>/v2/, and /v2/ is their gallery.
+// The v1 pages above are rendered with look v1 pinned (page() below passes it), so the published v1 bank does not move.
+for (const f of FAMILIES) {
+  const ex = join(ROOT, 'templates', f.id, 'example.json');
+  if (!existsSync(ex)) continue;
+  write(`t/${f.id}/v2/index.html`, compose(f.id, readJSON(ex), { nav: false, look: 'v2', generated }));
+  if (!existsSync(join(site, 't', f.id, 'example.json'))) { cpSync(ex, join(site, 't', f.id, 'example.json')); const sc = join(ROOT, 'templates', f.id, 'schema.json'); if (existsSync(sc)) cpSync(sc, join(site, 't', f.id, 'schema.json')); }
+}
+write('v2/index.html', galleryHtml({ root: ROOT }));
+
 write('_headers', `/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n/shell/*\n  Access-Control-Allow-Origin: *\n/parts/*\n  Access-Control-Allow-Origin: *\n/templates.json\n  Access-Control-Allow-Origin: *\n/nav.json\n  Access-Control-Allow-Origin: *\n/t/*/example.json\n  Access-Control-Allow-Origin: *\n/t/*/schema.json\n  Access-Control-Allow-Origin: *\n`);
-console.log(JSON.stringify({ generated, families: D.ORDER.length, built: D.builtIds(), examples: builtCount + 1 }));
+console.log(JSON.stringify({ generated, families: D.ORDER.length, built: D.builtIds(), examples: builtCount + 1, v2: FAMILIES.map((f) => f.id) }));

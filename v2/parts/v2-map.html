@@ -1,0 +1,3 @@
+{{!-- v2 · mind map: the same tidy-tree SVG (bin/lib/helpers.mjs mapSvg), lit in the page hue. Data: {centre, types} --}}
+{{#if types}}<div class="mapf">{{map .}}</div><div class="lanes" style="margin-top:10px">{{#each types}}<span><i style="--sc:hsl(var(--h) 70% 62%)"></i>{{label}} {{items.length}}</span>{{/each}}</div>
+{{else}}<div class="empty">Nothing linked yet: no repos, Works, questions or people point at this page.</div>{{/if}}

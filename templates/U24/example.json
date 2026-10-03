@@ -1,0 +1,348 @@
+{
+ "meta": {
+  "title": "Agent Base release 1",
+  "crumb": [
+   {
+    "label": "Pages"
+   },
+   {
+    "label": "Release"
+   },
+   {
+    "label": "Agent Base R1"
+   }
+  ],
+  "source": "SISO_Agency/apps/siso-internal-labs/siso-internal-labs-agents/.agents/research/2026-10-01-agent-app/hub-design/RELEASE-1.md; a0-task list (task records mentioning release-1) 3 Oct; git log of _data/worktrees/siso-internal-labs-agent-base/release-1 (branch opus/release-1b, read-only)."
+ },
+ "entity": {
+  "kind": "release",
+  "hue_key": "Agent Base",
+  "state": "working",
+  "crumb": [
+   {
+    "label": "Pages"
+   },
+   {
+    "label": "Releases"
+   },
+   {
+    "label": "Agent Base R1"
+   }
+  ],
+  "kicker": [
+   "Release",
+   "Agent Base",
+   "R1"
+  ],
+  "name": "Agent Base release 1",
+  "lede": "Every screen change Shaan asked for on 2 Oct, put into one spec so a single Opus worker could build it in one go, each change in its own commit so he can take or skip them.",
+  "tags": [
+   {
+    "label": "Landed in the ab-queue 3 Oct 03:59",
+    "tone": "g"
+   },
+   {
+    "label": "built on the laptop",
+    "tone": "b"
+   }
+  ],
+  "owner": {
+   "label": "Built by",
+   "name": "RELEASE-1",
+   "project": "Agent Base",
+   "status": "waiting",
+   "sentence": "<b class=\"d\">Opus worker</b> · idle in its worktree",
+   "why": "Spec by HUB-DESIGN, 2 Oct 18:20; owner AGENT-BASE.",
+   "action": {
+    "label": "Open RELEASE-1",
+    "icon": "message-square"
+   }
+  },
+  "stage": {
+   "panel": {
+    "title": "Release 1 readout",
+    "lines": [
+     {
+      "k": "Branch",
+      "v": "opus/release-1b @ 96dfce2"
+     },
+     {
+      "k": "Commits on it",
+      "v": "498"
+     },
+     {
+      "k": "Titled R1.n",
+      "v": "45 commits, 16 distinct R1 numbers"
+     },
+     {
+      "k": "Spec",
+      "v": "R1.1 to R1.19, later R1.20-R1.25 added by commits"
+     },
+     {
+      "k": "Notes",
+      "v": "18 lines for the update pop-up",
+      "tone": "g"
+     }
+    ]
+   }
+  }
+ },
+ "stats": [
+  {
+   "label": "Changes in the spec",
+   "period": "R1.1 to R1.19",
+   "value": "19",
+   "delta": {
+    "label": "3 moved or parked",
+    "tone": "a"
+   },
+   "line": "R1.6 to the browser lane, R1.11 folded into R1.17, R1.12 parked",
+   "info": "headings in RELEASE-1.md"
+  },
+  {
+   "label": "Distinct R1 numbers committed",
+   "period": "on the branch",
+   "value": "16",
+   "delta": {
+    "label": "incl. R1.20-25",
+    "tone": "b"
+   },
+   "line": "R1.1, 2, 4, 7, 8, 14, 15, 17-25",
+   "info": "git log subjects matching ^R1.n, unique, in the release-1 worktree"
+  },
+  {
+   "label": "R1-titled commits",
+   "period": "on the branch",
+   "value": "45",
+   "of": "/498",
+   "delta": {
+    "label": "rest are merges and fixes",
+    "tone": "z"
+   },
+   "line": "the others merge main and lanes",
+   "info": "git log | grep -cE '^R1.n' versus git log | wc -l"
+  },
+  {
+   "label": "Task records",
+   "period": "mention release-1",
+   "value": "19",
+   "delta": {
+    "label": "17 live",
+    "tone": "g"
+   },
+   "line": "2 specced",
+   "info": "a0-task records containing release-1"
+  }
+ ],
+ "chart": {
+  "label": "Commits",
+  "period": "per day, last 11 days",
+  "values": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   341,
+   157
+  ],
+  "labels": [
+   "23",
+   "",
+   "25",
+   "",
+   "27",
+   "",
+   "29",
+   "",
+   "1",
+   "2",
+   "3"
+  ],
+  "hot": 10,
+  "info": "git log --since=2026-09-23 per day in the release-1 worktree; includes merged main history"
+ },
+ "cards": [
+  {
+   "type": "work",
+   "title": "Work by state",
+   "icon": "list-checks",
+   "span": 2,
+   "info": "a0-task list: records that mention release-1; 'live' shown as done",
+   "work": {
+    "value": "17",
+    "of": "of 19",
+    "scope": "live",
+    "segs": [
+     {
+      "state": "done",
+      "n": 17
+     },
+     {
+      "state": "specced",
+      "n": 2
+     }
+    ],
+    "items": [
+     {
+      "id": "t-0238",
+      "title": "Pinned agents sit directly under Agent Zero, below a divider",
+      "state": "done"
+     },
+     {
+      "id": "t-0239",
+      "title": "Chat legibility: events fold into one quiet line",
+      "state": "done"
+     },
+     {
+      "id": "t-0109",
+      "title": "Sub-agents show as one live line the moment they launch",
+      "state": "done"
+     },
+     {
+      "id": "t-0106",
+      "title": "Timeline in the right-hand panel",
+      "state": "done"
+     },
+     {
+      "id": "t-0244",
+      "title": "Today's spend is off the bottom",
+      "state": "done"
+     },
+     {
+      "id": "a0-018",
+      "title": "Agent Zero on the SDK host; compaction as an in-process relay",
+      "state": "specced"
+     },
+     {
+      "id": "t-0108",
+      "title": "Redesign how Agent Base gets built, from first principles",
+      "state": "specced"
+     }
+    ],
+    "more": {
+     "n": 12,
+     "label": "more live tasks in Tasks"
+    }
+   }
+  },
+  {
+   "type": "deliv",
+   "title": "What shipped",
+   "icon": "rocket",
+   "count": 5,
+   "span": 1,
+   "info": "git log in the release-1 worktree, times +07",
+   "items": [
+    {
+     "at": "2 Oct",
+     "title": "R1.1 Stats counts the hub's agents",
+     "line": "first commit, 17:51",
+     "pill": "done",
+     "tone": "g"
+    },
+    {
+     "at": "2 Oct",
+     "title": "R1.8 Quiet events",
+     "line": "19:59",
+     "pill": "done",
+     "tone": "g"
+    },
+    {
+     "at": "2 Oct",
+     "title": "R1.2 Side nav D1-D6",
+     "line": "approved spec merged 21:16",
+     "pill": "done",
+     "tone": "g"
+    },
+    {
+     "at": "2 Oct",
+     "title": "R1.19 Halo rim composer",
+     "line": "live fan-out, picker, voice orb, 22:03 to 23:04",
+     "pill": "done",
+     "tone": "g"
+    },
+    {
+     "at": "3 Oct",
+     "title": "t-0263 phone view",
+     "line": "Home, switcher, Tasks and ping sheets, 03:58 and 04:25",
+     "pill": "in branch",
+     "tone": "b"
+    }
+   ]
+  },
+  {
+   "type": "timeline",
+   "title": "What happened",
+   "icon": "clock",
+   "span": 1,
+   "info": "git log, release-1 worktree",
+   "items": [
+    {
+     "at": "3 Oct 04:27",
+     "text": "Merge origin/main into opus/release-1b",
+     "hot": true
+    },
+    {
+     "at": "3 Oct 03:59",
+     "text": "ab-queue lands opus/release-1b (53ce76a)"
+    },
+    {
+     "at": "3 Oct 00:19",
+     "text": "R1.15 Today's spend moves to the top bar"
+    },
+    {
+     "at": "2 Oct 19:48",
+     "text": "Plan changed: build on the laptop, mini move parked"
+    }
+   ]
+  },
+  {
+   "type": "checks",
+   "title": "Release acceptance",
+   "icon": "check-circle",
+   "span": 2,
+   "info": "'Done looks like' in RELEASE-1.md; done flags from the git log only, tests and review not read.",
+   "items": [
+    {
+     "text": "Every change has its own commit",
+     "done": true
+    },
+    {
+     "text": "Release merged to origin/main (ab-queue landed 3 Oct 03:59)",
+     "done": true
+    },
+    {
+     "text": "pnpm check plus each change's test",
+     "done": false,
+     "em": "not verified here"
+    },
+    {
+     "text": "WebKit shots at 1440 and 390 per change, and a live probe of the deployed app",
+     "done": false,
+     "em": "not verified here"
+    },
+    {
+     "text": "HUB-DESIGN reviews the shots and live app",
+     "done": false,
+     "em": "not verified here"
+    },
+    {
+     "text": "Update pop-up on the laptop shows the notes",
+     "done": false,
+     "em": "not verified here"
+    }
+   ]
+  }
+ ],
+ "missing": [
+  "review verdict from HUB-DESIGN",
+  "test results per change",
+  "which R1 changes Shaan has ticked to take",
+  "R1.3, R1.5, R1.9, R1.10, R1.13 commits under their own R1 number"
+ ]
+}

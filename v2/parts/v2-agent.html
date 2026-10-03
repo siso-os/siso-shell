@@ -1,0 +1,12 @@
+{{!-- v2 · agent entry (replaces parts/quickstart): the terminal, re-lit, and what to know said as sentences.
+     Data: {entry:{path,href}, commands:[], owner:{name,href,last}, verification, context_url} --}}
+<div class="term">
+  <div class="tw"><div class="bar"><i></i><i></i><i></i><span>{{#if entry}}{{entry.path}}{{else}}zsh{{/if}}</span></div>
+    {{#if commands}}<ol>{{#each commands}}<li><code>{{.}}</code></li>{{/each}}</ol>{{else}}<div class="none">No commands yet: this page is readable, not yet runnable.</div>{{/if}}</div>
+  <div class="say">
+    {{#if entry}}<p>Read {{#if entry.href}}<a href="{{entry.href}}"><code>{{entry.path}}</code></a>{{else}}<code>{{entry.path}}</code>{{/if}} first.</p>{{/if}}
+    {{#if owner}}<p><b>{{#if owner.href}}<a href="{{owner.href}}">{{owner.name}}</a>{{else}}{{owner.name}}{{/if}}</b> owns it{{#if owner.last}}; its last writeback was {{owner.last}}{{/if}}.</p>{{/if}}
+    {{#if verification}}<p><b>Done when</b> {{{verification}}}</p>{{/if}}
+    {{#if context_url}}<p>Machine-readable: <a href="{{context_url}}"><code>{{context_url}}</code></a></p>{{/if}}
+  </div>
+</div>

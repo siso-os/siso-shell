@@ -5,7 +5,7 @@ import { makeEngine } from './bin/lib/engine.mjs';
 import { helpers } from './bin/lib/helpers.mjs';
 import { compose, sectionsOf, readJSON, ROOT } from './bin/lib/compose.mjs';
 import { join } from 'node:path';
-import { mkdtempSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, writeFileSync, existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 
 const groups = [{ id: 'a', label: 'A', destinations: [{ label: 'X', href: '/x/', icon: 'book-open' }, { label: 'P', href: '/p/', private: true }] }];
@@ -34,13 +34,14 @@ test('engine: if/else, each with meta, partials with context, raw, helpers, comm
   assert.equal(out.replace(/<svg[\s\S]*<\/svg>/, '[svg]'), '<b>&lt;n&gt;</b><i>1:a</i><i>2:b!</i>ok[K/&lt;n&gt;/&lt;n&gt;]<u>r</u>[svg]');
   assert.equal(e.render(e.partial('x'), { name: 'n', items: [], sub: { k: 'K' }, raw: '' }).replace(/<svg[\s\S]*<\/svg>/, ''), '<b>n</b>noneok[K/n/n]');
 });
-test('compose: every built family renders its example inside the shell with an On-this-page group', () => {
+test('compose v1 (pinned): every built family renders its example inside the shell with an On-this-page group', () => {
   const nav = readJSON(join(ROOT, 'site', 'nav.json'));
   const plan = readJSON(join(ROOT, 'site', 'templates.json'));
   for (const id of plan.order) {
     let data; try { data = readJSON(join(ROOT, 'templates', id, 'example.json')); } catch { continue; }
     const current = id === 'U23' ? '/' : `/t/${id}/`;
-    const html = compose(id, data, { nav, current, base: '' });
+    if (!existsSync(join(ROOT, 'templates', id, 'template.html')) && !existsSync(join(ROOT, 'templates', `${id}.html`))) continue; // v2-only family (U24)
+    const html = compose(id, data, { nav, current, base: '', look: 'v1' });
     assert.match(html, /<nav class="siso-sidebar is-expanded"/, id);
     assert.ok(sectionsOf(html).length >= 2, `${id} has sections`);
     assert.match(html, /siso-sidebar__page-group/, `${id} page group`);

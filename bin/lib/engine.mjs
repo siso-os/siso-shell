@@ -11,7 +11,7 @@ import { join } from 'node:path';
 
 export const esc = (v) => String(v ?? '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#39;');
 
-export function lookup(frames, path) {
+export function lookup(frames, path, strict = false) {
   if (path === '.' || path === 'this') return frames[frames.length - 1].ctx;
   let depth = frames.length - 1;
   while (path.startsWith('../')) { path = path.slice(3); depth = Math.max(0, depth - 1); }
@@ -25,17 +25,20 @@ export function lookup(frames, path) {
     cur = cur[key];
   }
   // Fall back to outer frames when a key is absent in the inner context (Handlebars-style recursive lookup).
-  if (cur === undefined && depth > 0 && !path.includes('.')) return lookup(frames.slice(0, depth), path);
+  // v2 engines are strict (Handlebars' own default): an absent key is absent, so an item without `href` never borrows its page's.
+  if (cur === undefined && depth > 0 && !path.includes('.') && !strict) return lookup(frames.slice(0, depth), path);
   return cur;
 }
 
 const truthy = (v) => Array.isArray(v) ? v.length > 0 : (v !== undefined && v !== null && v !== false && v !== '' && v !== 0);
 
-export function makeEngine({ partsDir, helpers = {} }) {
+export function makeEngine({ partsDir, helpers = {}, strict = false }) {
+  const look = (frames, path) => lookup(frames, path, strict);
   const cache = new Map();
+  const dirs = Array.isArray(partsDir) ? partsDir : [partsDir]; // v2: [v2/parts, parts] — the first dir that has the part wins
   function partial(name) {
     if (!cache.has(name)) {
-      const file = join(partsDir, `${name}.html`);
+      const file = dirs.map((d) => join(d, `${name}.html`)).find((f) => existsSync(f)) || join(dirs[0], `${name}.html`);
       if (!existsSync(file)) throw new Error(`Unknown part: ${name} (${file})`);
       cache.set(name, readFileSync(file, 'utf8'));
     }
@@ -55,22 +58,22 @@ export function makeEngine({ partsDir, helpers = {} }) {
       if (close === -1) throw new Error('Unclosed tag');
       const tag = src.slice(open + (raw ? 3 : 2), close).trim();
       i = close + (raw ? 3 : 2);
-      if (raw) { out += String(lookup(frames, tag) ?? ''); continue; }
+      if (raw) { out += String(look(frames, tag) ?? ''); continue; }
       if (tag.startsWith('!')) continue;
       if (tag.startsWith('#')) {
         const [kind, ...rest] = tag.slice(1).split(/\s+/);
         const arg = rest.join(' ');
         const { body, elseBody, end } = block(src, i, kind);
         i = end;
-        if (kind === 'if') out += truthy(lookup(frames, arg)) ? render(body, frames) : render(elseBody, frames);
-        else if (kind === 'unless') out += !truthy(lookup(frames, arg)) ? render(body, frames) : render(elseBody, frames);
+        if (kind === 'if') out += truthy(look(frames, arg)) ? render(body, frames) : render(elseBody, frames);
+        else if (kind === 'unless') out += !truthy(look(frames, arg)) ? render(body, frames) : render(elseBody, frames);
         else if (kind === 'each') {
-          const list = lookup(frames, arg);
+          const list = look(frames, arg);
           const items = Array.isArray(list) ? list : (list && typeof list === 'object' ? Object.entries(list).map(([k, v]) => ({ key: k, value: v })) : []);
           if (!items.length) out += render(elseBody, frames);
           else items.forEach((item, idx) => { out += render(body, [...frames, { ctx: item, meta: { index: idx, n: idx + 1, first: idx === 0, last: idx === items.length - 1 } }]); });
         } else if (kind === 'with') {
-          const v = lookup(frames, arg);
+          const v = look(frames, arg);
           out += truthy(v) || (v && typeof v === 'object') ? render(body, [...frames, { ctx: v }]) : render(elseBody, frames);
         } else throw new Error(`Unknown block: ${kind}`);
         continue;
@@ -78,7 +81,7 @@ export function makeEngine({ partsDir, helpers = {} }) {
       if (tag.startsWith('>')) {
         const [name, ...rest] = tag.slice(1).trim().split(/\s+/);
         const arg = rest.join(' ');
-        const ctx = arg ? lookup(frames, arg) : frames[frames.length - 1].ctx;
+        const ctx = arg ? look(frames, arg) : frames[frames.length - 1].ctx;
         out += render(partial(name), arg ? [...frames, { ctx }] : frames);
         continue;
       }
@@ -86,11 +89,11 @@ export function makeEngine({ partsDir, helpers = {} }) {
       if (helperMatch && helpers[helperMatch[1]]) {
         const arg = helperMatch[2].trim();
         const literal = /^(['"]).*\1$/.test(arg) ? arg.slice(1, -1) : undefined;
-        const val = literal !== undefined ? literal : lookup(frames, arg);
+        const val = literal !== undefined ? literal : look(frames, arg);
         out += helpers[helperMatch[1]](val === undefined ? arg : val, frames);
         continue;
       }
-      out += esc(lookup(frames, tag));
+      out += esc(look(frames, tag));
     }
     return out;
   }

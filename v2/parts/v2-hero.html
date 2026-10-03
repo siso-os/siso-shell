@@ -1,0 +1,18 @@
+{{!-- v2 · hero (replaces parts/heading): kicker in the page hue, 40 px name, lede, tags, jump row; the status card becomes the
+     capsule on the right (rim spins only if a seat is working, breathes amber if something needs him); its facts sit behind
+     an i ("N sources"), never as a key: value grid. Data: _v2.hero (built from heading by v2/v2.mjs), _v2.cap --}}
+<header class="hero{{#unless _v2.hero.status}} solo{{/unless}}{{#if _v2.cap}} {{_v2.cap}}{{/if}}" id="top">
+  <div>
+    {{#if _v2.hero.kicker}}<div class="kick">{{{_v2.hero.kicker}}}</div>{{/if}}
+    <h1 class="h1">{{_v2.hero.title}}</h1>
+    {{#if _v2.hero.subtitle}}<p class="lede">{{{_v2.hero.subtitle}}}</p>{{/if}}
+    {{#if _v2.hero.tags}}<div class="tags">{{#each _v2.hero.tags}}{{#if href}}<a class="tag {{tc}}" href="{{href}}"{{#if title}} title="{{title}}"{{/if}}>{{#if dot}}<i class="dot {{tc}}"></i>{{/if}}{{label}}</a>{{else}}<span class="tag {{tc}}"{{#if title}} title="{{title}}"{{/if}}>{{#if dot}}<i class="dot {{tc}}"></i>{{/if}}{{label}}</span>{{/if}}{{/each}}</div>{{/if}}
+    {{#if _v2.hero.jump}}<nav class="jump" aria-label="Jump to">{{#each _v2.hero.jump}}<a href="{{href}}"{{#if external}} target="_blank" rel="noopener noreferrer"{{/if}}>{{#if live}}<i class="dot ok"></i>{{/if}}{{label}}</a>{{/each}}</nav>{{/if}}
+  </div>
+  {{#with _v2.hero.status}}<aside class="cap2 {{@root._v2.cap}}">
+    <span class="k">{{kicker}}</span>
+    <div class="val">{{value}}</div>
+    {{#if note}}<p class="note">{{{note}}}</p>{{/if}}
+    {{#if facts}}<details class="srcs"><summary><i class="info">i</i>{{count facts}} sources behind this</summary>{{#each facts}}<p><b>{{k}}</b>{{{v}}}</p>{{/each}}</details>{{/if}}
+  </aside>{{/with}}
+</header>

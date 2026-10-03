@@ -1,0 +1,8 @@
+{{!-- v2 · receipts (replaces parts/evidence's left column): a fact is a green tick with its receipt under it; a proposal is a
+     hollow violet ring. Limits and version render in their own card (see the family templates). Data: {facts, proposals} --}}
+{{#if facts}}<div class="legend"><span><i style="background:var(--green)"></i>fact, has a receipt</span>{{#if proposals}}<span><i style="box-shadow:inset 0 0 0 1.5px var(--violet)"></i>proposal, not yet</span>{{/if}}</div>{{else}}{{#if proposals}}<div class="legend"><span><i style="box-shadow:inset 0 0 0 1.5px var(--violet)"></i>proposal, not yet</span></div>{{/if}}{{/if}}
+<div class="checks">
+{{#each facts}}<div class="ck done"><i></i><div>{{{claim}}}{{#if receipt}}<em>{{#if href}}<a href="{{href}}">{{receipt}}</a>{{else}}{{receipt}}{{/if}}{{#if at}} · {{at}}{{/if}}</em>{{/if}}</div></div>{{/each}}
+{{#each proposals}}<div class="ck prop"><i></i><div>{{{claim}}}{{#if why}}<em>{{why}}</em>{{/if}}</div></div>{{/each}}
+</div>
+{{#unless facts}}{{#unless proposals}}<div class="empty">No evidence recorded.</div>{{/unless}}{{/unless}}

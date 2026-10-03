@@ -1,0 +1,53 @@
+{{!-- U24 · Entity page (client · agency · industry · project · task · agent · machine · release), look v2 only.
+     The same shape as Agent Base's EntityPage.tsx (project pages v2): hero (crumb in the top bar, kicker, name, lede, tags, owner
+     capsule) with the image stage on the right · one joined stat bar with an activity cell · a bento of typed cards, each with
+     its source behind an i · one quiet "Not recorded yet" line. Data: schema.json; view: v2/v2.mjs entity(). --}}
+{{#with _v2}}
+<header class="hero has-stage {{state}}" id="top">
+  <div>
+    {{#if @root.entity.kicker}}<div class="kick">{{#each @root.entity.kicker}}{{#unless @first}}<i></i>{{/unless}}<span>{{.}}</span>{{/each}}</div>{{/if}}
+    <h1 class="h1">{{@root.entity.name}}</h1>
+    {{#if @root.entity.lede}}<p class="lede">{{{@root.entity.lede}}}</p>{{/if}}
+    {{#if tags}}<div class="tags">{{#each tags}}<span class="tag {{tc}}">{{label}}</span>{{/each}}</div>{{/if}}
+    {{#with owner}}<div class="cap2 {{cls}}" style="--oh:{{oh}}">
+      <div class="own-top">{{{face}}}<div style="min-width:0"><div class="k">{{label}}</div><div class="own-n">{{name}}</div>{{#if sentence}}<div class="own-s">{{{sentence}}}</div>{{/if}}</div>{{#if action}}<a class="go{{#if action.ghost}} ghost{{/if}}"{{#if action.href}} href="{{action.href}}"{{/if}} title="{{action.label}}">{{#if action.icon}}{{icon action.icon}}{{else}}{{icon play}}{{/if}}</a>{{/if}}</div>
+      {{#if why}}<div class="own-why">{{{why}}}</div>{{/if}}
+      {{#if crew}}<div class="crew"><span class="stackf">{{{crewFaces}}}</span><small>{{{crew_line}}}</small></div>{{/if}}
+    </div>{{/with}}
+  </div>
+  <div class="stage">
+    {{#with stage.panel}}<div class="readout"><h3>{{icon gauge}}{{title}}</h3>{{#each lines}}<div class="ro"><span>{{k}}</span><b class="{{tc}}">{{v}}</b></div>{{/each}}</div>{{/with}}
+    {{#unless stage.panel}}{{#if stage.front}}
+      {{#with stage.back}}<div class="bw back{{#if locked}} locked{{/if}}"><div class="chrome"><i></i><i></i><i></i><span class="url"><span class="dot {{dot}}"></span>{{url}}</span></div>{{#if locked}}<div class="shot">{{icon lock}}<span>{{locked}}</span></div>{{else}}<img class="shot" src="{{src}}" alt="{{url}}">{{/if}}</div>{{/with}}
+      {{#with stage.front}}<div class="bw front{{#if @root._v2.stage.solo}} solo{{/if}}{{#if locked}} locked{{/if}}"><div class="chrome"><i></i><i></i><i></i><span class="url"><span class="dot {{dot}}"></span>{{url}}</span></div>{{#if locked}}<div class="shot">{{icon lock}}<span>{{locked}}</span></div>{{else}}<img class="shot" src="{{src}}" alt="{{url}}">{{/if}}</div>{{/with}}
+      {{#if stage.phone}}<div class="phone"><img src="{{stage.phone}}" alt="mobile"></div>{{/if}}
+    {{else}}<div class="field">{{#if stage.icon}}{{icon stage.icon}}{{else}}{{icon layout-grid}}{{/if}}<span>{{#if stage.empty}}{{stage.empty}}{{else}}No image yet{{/if}}</span></div>{{/if}}{{/unless}}
+    {{#if stage.caps}}<div class="capts">{{#each stage.caps}}<span class="{{#if off}}off{{/if}}"><i class="dot {{dot}}"></i>{{label}}</span>{{/each}}</div>{{/if}}
+  </div>
+</header>
+{{#if stats}}<div class="stats{{#if chart}} has-chart{{/if}}" style="--nstat:{{nstat}}">
+  {{#each stats}}<div class="stat"><div class="l">{{label}}{{#if info}}<i class="info" tabindex="0" data-src="{{info}}">i</i>{{/if}}</div><div class="p">{{period}}</div><div class="row"><span class="n{{#if dim}} dim{{/if}}">{{value}}{{#if of}}<small>{{of}}</small>{{/if}}</span>{{#if delta}}<span class="delta {{dtc}}">{{delta.label}}</span>{{/if}}</div>{{#if line}}<div class="s">{{line}}</div>{{/if}}</div>{{/each}}
+  {{#with chart}}<div class="stat"><div class="l">{{label}}{{#if info}}<i class="info" tabindex="0" data-src="{{info}}">i</i>{{/if}}</div><div class="p">{{period}}</div><div class="bars">{{#each cells}}<i class="{{#if hot}}hot live{{/if}}" style="height:{{h}}%">{{#if hot}}<b>{{v}}</b>{{/if}}</i>{{/each}}</div><div class="blab">{{#each labels}}<span>{{.}}</span>{{/each}}</div></div>{{/with}}
+</div>{{/if}}
+<div class="bento dense">
+{{#each cards}}<section class="siso-section card {{span}}" id="{{id}}">
+  <div class="ch"><span class="ic">{{icon icon}}</span><h2>{{title}}</h2>{{#if count}}<span class="c">{{count}}</span>{{/if}}{{#if info}}<i class="info" tabindex="0" data-src="{{info}}">i</i>{{/if}}</div>
+  {{#if is_work}}{{#with work}}<div class="big"><b>{{value}}</b>{{#if of}}<span>{{of}}</span>{{/if}}{{#if scope}}<em>{{scope}}</em>{{/if}}</div>
+    {{#if segs}}<div class="seg">{{#each segs}}<i class="{{sc}}" style="flex:{{n}}" title="{{n}} {{state}}"></i>{{/each}}</div><div class="segl">{{#each segs}}<span class="{{sc}}"><i></i>{{n}} {{state}}</span>{{/each}}</div>{{/if}}
+    {{#each items}}<a class="task {{sc}}"{{#if href}} href="{{href}}"{{/if}}><i></i><span>{{title}}</span><small>{{id}}</small></a>{{/each}}
+    {{#if more}}<div class="more"><b>+{{more.n}} more</b> {{more.label}}</div>{{/if}}{{/with}}{{/if}}
+  {{#if is_tiles}}<div class="tiles">{{#each items}}<a class="tile"{{#if href}} href="{{href}}"{{/if}}><div class="art{{#if short}} short{{/if}}" style="--th:{{th}}">{{#if img}}<img src="{{img}}" alt="">{{else}}{{#if bigFace}}{{{bigFace}}}{{else}}{{#if icon}}{{icon icon}}{{else}}<span class="mono">{{mono}}</span>{{/if}}{{/if}}{{/if}}{{#if flag}}<span class="flag{{#if warn}} warn{{/if}}">{{flag}}</span>{{/if}}</div><div class="ft"><div style="min-width:0"><b>{{name}}</b><small>{{line}}</small></div><span class="stackf">{{{facesHtml}}}</span></div></a>{{/each}}</div>{{/if}}
+  {{#if is_feat}}<div class="rows">{{#each items}}<a class="feat"{{#if href}} href="{{href}}"{{/if}} style="--fh:{{fh}}"><span class="fi">{{icon icon}}</span><div style="min-width:0"><b>{{title}}</b>{{#if line}}<small>{{{line}}}</small>{{/if}}</div>{{#if pill}}<span class="pill {{tc}}">{{pill}}</span>{{else}}<span></span>{{/if}}</a>{{/each}}</div>{{/if}}
+  {{#if is_timeline}}<div class="tl">{{#each items}}<div class="ev{{#if hot}} hot{{/if}}"><time>{{at}}</time><span class="k"><i{{#if sc}} style="--sc:{{sc}}"{{/if}}></i></span><span>{{{text}}}{{#if em}} <em>{{em}}</em>{{/if}}</span></div>{{/each}}</div>{{/if}}
+  {{#if is_people}}<div class="ppl">{{#each items}}<a class="pp"{{#if href}} href="{{href}}"{{/if}}>{{#if faceHtml}}{{{faceHtml}}}{{else}}<span class="av" style="--ph:{{ph}}">{{initial}}</span>{{/if}}<div style="min-width:0"><b>{{name}}</b><small>{{{line}}}</small></div><span class="rt">{{{right}}}</span></a>{{/each}}</div>{{/if}}
+  {{#if is_quote}}{{#with quote}}<blockquote class="quote lg">{{text}}{{#if who}}<small>{{who}}{{#if at}} · {{at}}{{/if}}</small>{{/if}}</blockquote>{{/with}}{{/if}}
+  {{#if is_chips}}<div class="chips">{{#each items}}<a class="chip"{{#if href}} href="{{href}}"{{/if}}>{{#if icon}}{{icon icon}}{{/if}}{{label}}{{#if em}}<em>{{em}}</em>{{/if}}</a>{{/each}}</div>{{/if}}
+  {{#if is_deliv}}<div class="deliv">{{#each items}}<div class="dv">{{#if at}}<time>{{at}}</time>{{/if}}<b>{{title}}</b>{{#if line}}<small>{{{line}}}</small>{{/if}}{{#if pill}}<span class="pill {{tc}}">{{pill}}</span>{{/if}}</div>{{/each}}</div>{{/if}}
+  {{#if is_lines}}<div class="checks">{{#each items}}<p class="prose" style="font-size:13.5px;padding:4px 0">{{{.}}}</p>{{/each}}</div>{{/if}}
+  {{#if is_checks}}<div class="checks">{{#each items}}<div class="ck{{#if done}} done{{else}}{{#if warn}} warn{{/if}}{{/if}}"><i></i><div>{{{text}}}{{#if em}}<em>{{em}}</em>{{/if}}</div></div>{{/each}}</div>{{/if}}
+  {{#if is_live}}<div class="live">{{#each items}}<a class="lv"{{#if href}} href="{{href}}"{{/if}}><i class="dot {{dot}}"></i><div style="min-width:0"><b>{{url}}</b>{{#if line}}<small>{{line}}</small>{{/if}}</div>{{#if code}}<span class="pill {{#if dot}}{{dot}}{{/if}}">{{code}}</span>{{/if}}</a>{{/each}}</div>{{/if}}
+  {{#unless items}}{{#unless work}}{{#unless quote}}<div class="empty">{{#if empty}}{{empty}}{{else}}Nothing recorded here yet.{{/if}}</div>{{/unless}}{{/unless}}{{/unless}}
+</section>{{/each}}
+</div>
+{{#if @root.missing}}<div class="notrec"><b>Not recorded yet</b>{{#each @root.missing}}<span>{{.}}</span>{{/each}}</div>{{/if}}
+{{/with}}

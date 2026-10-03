@@ -1,0 +1,19 @@
+{{!-- U4 · Project one-pager, look v2: the project page an agent publishes reads like Agent Base's ProjectDashboard / EntityPage.
+     Hero (status capsule lit by its seats) · stat bar + activity · bento: his words, live, seats (faces), repos, map, landed,
+     what's left, timeline, research, docs, links, agent entry. Same data as template.html. --}}
+{{> v2-hero}}
+{{> v2-stats}}
+<div class="bento dense">
+  <section class="siso-section card s2" id="what">{{> v2-ch sections.what}}{{> v2-words words}}{{#if reasoning}}{{#if reasoning.why}}<details class="srcs"><summary><i class="info">i</i>How this page reads him</summary><p>{{{reasoning.why}}}</p>{{#if reasoning.questions}}{{#each reasoning.questions}}<p>· {{.}}</p>{{/each}}{{/if}}{{#if reasoning.claim_ceiling}}<p><b>Claims at most</b>{{{reasoning.claim_ceiling}}}</p>{{/if}}</details>{{/if}}{{/if}}</section>
+  <section class="siso-section card" id="live">{{> v2-ch sections.live}}{{#if _v2.urls}}<div class="live">{{#each _v2.urls}}<a class="lv" href="{{url}}"><i class="dot {{dot}}"></i><div style="min-width:0"><b>{{url}}</b><small>{{what}}{{#if checked}} · checked {{checked}}{{/if}}</small></div><span class="pill {{#if code}}{{tone tone}}{{else}}n{{/if}}">{{code}}</span></a>{{/each}}</div>{{else}}<div class="empty">No live page yet.</div>{{/if}}</section>
+  <section class="siso-section card" id="seats">{{> v2-ch sections.seats}}{{#if _v2.seats}}<div class="ppl">{{#each _v2.seats}}<a class="pp {{st}}"{{#if href}} href="{{href}}"{{/if}}>{{{face}}}<div style="min-width:0"><b>{{name}}</b><small>{{state}}{{#if last}} · {{last.at}}{{/if}}</small>{{#if last}}<small style="color:var(--tf)">{{{last.what}}}</small>{{/if}}</div><span></span></a>{{/each}}</div>{{else}}<div class="empty">Unowned: no seat has ever run on this project.</div>{{/if}}</section>
+  <section class="siso-section card s2" id="repos">{{> v2-ch sections.repos}}{{> v2-repos repos}}</section>
+  <section class="siso-section card s3" id="map">{{> v2-ch sections.map}}{{> v2-map map}}</section>
+  <section class="siso-section card s2" id="landed">{{> v2-ch sections.landed}}{{> v2-receipts landed}}{{#if landed.limits}}<div style="margin-top:12px">{{> v2-limits landed}}</div>{{/if}}</section>
+  <section class="siso-section card" id="left">{{> v2-ch sections.left}}{{> v2-contents left}}</section>
+  <section class="siso-section card s2" id="timeline">{{> v2-ch sections.timeline}}{{> v2-timeline}}</section>
+  <section class="siso-section card" id="research">{{> v2-ch sections.research}}{{#if research}}<div class="rows">{{#each research}}<a class="feat" href="{{href}}"><span class="fi">{{icon flask-conical}}</span><div style="min-width:0"><b>{{title}}</b><small>{{meaning}}</small></div><span class="pill v">{{kind}}</span></a>{{/each}}</div>{{else}}<div class="empty">No research Works linked to this project.</div>{{/if}}</section>
+  <section class="siso-section card s2" id="docs">{{> v2-ch sections.docs}}{{#if docs}}<div class="rows">{{#each docs}}<a class="feat"{{#if href}} href="{{href}}"{{/if}}><span class="fi">{{icon file-text}}</span><div style="min-width:0"><b style="font-family:var(--crm-font-mono);font-size:12px">{{path}}</b><small>{{what}}</small></div><span class="pill n">{{at}}</span></a>{{/each}}</div>{{else}}<div class="empty">No dated docs listed.</div>{{/if}}</section>
+  <section class="siso-section card" id="links">{{> v2-ch sections.links}}{{#if links}}<div class="rows">{{#each links}}<a class="feat" href="{{href}}"><span class="fi">{{icon arrow-up-right}}</span><div style="min-width:0"><b>{{title}}</b>{{#if why}}<small>{{why}}</small>{{/if}}</div><span></span></a>{{/each}}</div>{{else}}<div class="empty">No links out.</div>{{/if}}</section>
+  <section class="siso-section card s3" id="agent">{{> v2-ch sections.agent}}{{> v2-agent quickstart}}</section>
+</div>

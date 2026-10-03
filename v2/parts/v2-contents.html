@@ -1,0 +1,4 @@
+{{!-- v2 · numbered list with state pills, then the procedure as a lit spine. Data: {items:[{label,what,href,state,tone}], steps:[{label,what}]} --}}
+{{#if items}}<ol class="ol">{{#each items}}<li><div><b>{{#if href}}<a href="{{href}}">{{label}}</a>{{else}}{{label}}{{/if}}</b>{{#if state}}<span class="pill {{tone tone}}">{{state}}</span>{{/if}}{{#if what}}<span>{{{what}}}</span>{{/if}}</div></li>{{/each}}</ol>{{/if}}
+{{#if steps}}<div class="flow">{{#each steps}}<div class="fs"><b>{{label}}</b><span>{{{what}}}</span></div>{{/each}}</div>{{/if}}
+{{#unless items}}{{#unless steps}}<div class="empty">Nothing listed.</div>{{/unless}}{{/unless}}

@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en" class="no-js" data-look="v2" data-stream="{{stream}}" data-family="{{family}}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{{title}}</title>
+{{#if description}}<meta name="description" content="{{description}}">{{/if}}
+<meta name="generator" content="siso-shell bin/compose · {{family}} · v2">
+{{{head}}}
+<style>{{{css}}}</style>
+</head>
+<body class="{{#if rail}}rail-collapsed{{else}}v2-nonav{{/if}}" style="--h:{{hue}}">
+{{{rail}}}
+<div class="siso-shell-page">
+  <header class="v2-top">
+    <div class="v2-crumb">{{#each crumb}}{{#unless @first}}{{icon chevron-right}}{{/unless}}{{#if href}}<a href="{{href}}">{{label}}</a>{{else}}{{#if @last}}<strong>{{label}}</strong>{{else}}<span>{{label}}</span>{{/if}}{{/if}}{{/each}}</div>
+    <div class="v2-acts">{{#each actions}}<a href="{{href}}"{{#if external}} target="_blank" rel="noopener noreferrer"{{/if}}>{{#if icon}}{{icon icon}}{{/if}}<span>{{label}}</span></a>{{/each}}</div>
+  </header>
+  <main class="v2-page" id="content">
+{{{body}}}
+    <footer class="v2-foot">rendered by siso-shell · template {{family}} · look v2 · {{generated}}{{#if source}} · data {{source}}{{/if}}</footer>
+  </main>
+</div>
+<script>{{{js}}}</script>
+</body>
+</html>

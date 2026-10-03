@@ -1,0 +1,2 @@
+{{!-- v2 · his words, verbatim and dated (a pull quote with the hue's rule). Data: [{text,who,at,href}] --}}
+{{#each .}}<blockquote class="quote{{#if @first}} lg{{/if}}">{{text}}<small>{{who}}{{#if at}} · {{at}}{{/if}}{{#if href}} · <a href="{{href}}">source</a>{{/if}}</small></blockquote>{{else}}<div class="empty">No verbatim words captured for this record.</div>{{/each}}

@@ -1,0 +1,3 @@
+{{!-- v2 · limits + version (parts/evidence's side column): amber rings, one quiet version line. Data: {limits, version} --}}
+{{#if limits}}<div class="checks">{{#each limits}}<div class="ck warn"><i></i><div>{{{.}}}</div></div>{{/each}}</div>{{else}}<div class="empty">No limits recorded.</div>{{/if}}
+{{#if version}}<div class="more" style="margin-top:12px">Version {{#if version.href}}<a href="{{version.href}}"><code>{{version.label}}</code></a>{{else}}<code>{{version.label}}</code>{{/if}}{{#if version.at}} · {{version.at}}{{/if}}</div>{{/if}}

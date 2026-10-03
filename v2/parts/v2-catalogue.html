@@ -1,0 +1,12 @@
+{{!-- v2 · catalogue: the same data-cat-* hooks parts/catalogue.js drives; glass search, capsule filters, lit link cards.
+     Data: {id, filters:[{key,label,values}], items:[{id,kicker,title,summary,href,status,tone,tags:[{key,value}],search}], empty} --}}
+<div class="catalogue" data-catalogue="{{id}}">
+  <div class="catbar needs-js">
+    <label class="srch">{{icon search}}<input type="search" placeholder="Search {{items.length}} records…" aria-label="Search" data-cat-search autocomplete="off" spellcheck="false"></label>
+    {{#each filters}}<select data-cat-filter="{{key}}" aria-label="{{label}}"><option value="">{{label}} · all</option>{{#each values}}<option value="{{.}}">{{.}}</option>{{/each}}</select>{{/each}}
+    <span class="cnt" data-cat-count>{{items.length}} of {{items.length}}</span>
+  </div>
+  {{#if items}}<div class="links" data-cat-grid>{{#each items}}<a class="lk {{tone tone}}" href="{{href}}" data-cat-item data-search="{{search}}"{{#each tags}} data-tag-{{key}}="{{value}}"{{/each}}><span class="kk">{{{kicker}}}</span><b>{{title}}</b><span>{{{summary}}}</span><span class="ft2"><span>{{id}}</span>{{#if status}}<span class="pill {{tone tone}}">{{status}}</span>{{/if}}</span></a>{{/each}}</div>
+  <div class="empty" data-cat-empty hidden>No records match. Clear a filter.</div>
+  {{else}}<div class="empty">{{#if empty}}{{{empty}}}{{else}}0 records; nothing registered yet.{{/if}}</div>{{/if}}
+</div>

@@ -1,0 +1,8 @@
+{{!-- v2 · repositories: a private repo keeps its card and loses only its payload. Data: [{repo,url,branch,head,head_at,private,access,rights,what,satellite}] --}}
+{{#if .}}<div class="repos">{{#each .}}<div class="rp">
+  <div class="top"><span class="gl">{{#if private}}{{icon lock}}{{else}}{{icon git-branch}}{{/if}}</span><div style="min-width:0"><b>{{repo}}</b><small>{{#if url}}{{url}}{{else}}no public locator{{/if}}</small></div>{{#if private}}<span class="pill n">private</span>{{else}}<span class="pill g">public</span>{{/if}}</div>
+  {{#if what}}<p>{{{what}}}</p>{{/if}}
+  <div class="meta">{{#if branch}}<span><b>{{branch}}</b> branch</span>{{/if}}{{#if head}}<span>head <b>{{head}}</b></span>{{/if}}{{#if head_at}}<span>{{head_at}}</span>{{/if}}{{#if satellite}}<span>satellite</span>{{/if}}{{#if access}}<span>{{access}}</span>{{/if}}</div>
+  {{#if url}}<a class="more" href="{{url}}">Open repo ›</a>{{/if}}
+</div>{{/each}}</div>
+{{else}}<div class="empty">No repository registered.</div>{{/if}}
