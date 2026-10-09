@@ -18,20 +18,50 @@
 </p>
 
 <!-- /siso-os:header -->
-The SISO CRM GroupedRail as a static shell, the twelve page modules it frames, and one template per page family the Great Library and every SISO front door composes. No framework; `node` is the only build step. Published bank: https://siso-shell.pages.dev/ (the gallery is the front page; `/t/<id>/` is each family's spec; `/t/<id>/example/` its rendered example; `/how/` the reuse guide).
 
+Turn a JSON file into a finished HTML page. SISO Shell is a bank of 25 page templates (a landing page, a catalogue, a
+project one-pager, a research reader and more), each with a schema and a real example. Fill in the JSON, run one command, and you get one
+self-contained page with a sidebar, ready to host anywhere. Our agents write their reports and front doors with it.
+
+See every template rendered at [siso-shell.pages.dev](https://siso-shell.pages.dev). More on
+[the website](https://www.sisolabs.space/ui-hub/).
+
+## Install
+
+You need [Node.js](https://nodejs.org) 18 or later. There is nothing to install beyond that.
+
+```bash
+git clone https://github.com/siso-os/siso-shell.git
+cd siso-shell
 ```
-shell/        tokens.css (SISO CRM tokens, verbatim) · rail.css (GroupedRail.css verbatim + token-only static additions) · rail.js · icons.mjs (lucide, ISC)
-shell.mjs     rail({title, mark, home, groups, current, page}) → <nav class="siso-sidebar"> · head(base) → <link>/<script>
-parts/        the twelve modules (library-ui-spec §6) + atoms, one HTML partial each · parts.css · catalogue.js
-templates/    one folder per family U0…U23: template.html · schema.json · example.json (real data) · README.md (generated from plan/templates.json)
-bin/compose   compose <family> <data.json> [--nav nav.json] [--base URL] [--current href] [--out page.html]
-bin/build-site  renders site/ (gallery, 24 detail pages, examples, /how/, 404, shell/, parts/)
-site/         what siso-shell.pages.dev serves; nav.json is the bank's own site map, templates.json the plan
-```
 
-Use it: `bin/compose U4 templates/U4/example.json --out page.html`, or link the shell by URL (`head("https://siso-shell.pages.dev/shell")`) and paste a `<nav class="siso-sidebar">` with your groups. `node --test` runs the engine, shell and compose tests.
+## Use it
 
-Rules: the rail is copied from the CRM, never adapted (every value resolves through the CRM token names; sources hashed in `shell/rail.css`); groups are headings and never fold, only "On this page" does; example data is real or the part shows a truthful empty state; his words are verbatim or absent; presentation robbed from the Action Model sites and 21st.dev picks carries its receipt; lucide icons are ISC (notice in `shell/icons.mjs`).
+1. **Pick a template** in the [gallery](https://siso-shell.pages.dev). Each one has an id: `U4` is the project
+   one-pager, for example.
+2. **Copy its example data** and edit it: `cp templates/U4/example.json my-page.json`. The fields are described in
+   `templates/U4/schema.json`.
+3. **Render it:**
+   ```bash
+   node bin/compose U4 my-page.json --out my-page.html
+   ```
+   Open `my-page.html`. Edit the JSON, run it again, refresh.
 
-Legacy: `assets/shell.{css,js}` and the flat 0.1.0 `rail()` signature are kept for the Great Library's pinned import until it re-pins. Original static implementation from the owner's SISO CRM interaction brief; no client code, data or private operational identifiers are included. No general redistribution licence is asserted.
+Other commands:
+
+- `npm run build`: renders the gallery and every example into `site/`, ready for static hosting.
+- `npm test`: checks the compose engine and every template.
+
+## How it works
+
+- **Templates:** `templates/U0` to `templates/U24`, each with `template.html`, `schema.json`, `example.json` and a
+  README saying what the page is for.
+- **Parts:** the building blocks in `parts/` (hero, sections, timeline, map, gallery, repo cards and more), shared by
+  the templates.
+- **Shell:** `shell/` holds the sidebar, the design tokens and the icons, so every page looks like part of one site.
+- **Compose:** `bin/compose` fills the template with your data, wraps it in the shell and writes one HTML file.
+  `--inline` also puts the sidebar and images inside the file; `--nav nav.json` sets your own sidebar links.
+
+## Licence
+
+MIT. See [LICENSE](LICENSE). Icons are [Lucide](https://lucide.dev) (ISC).

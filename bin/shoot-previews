@@ -13,7 +13,7 @@ const OUT = join(ROOT, 'site/previews');
 mkdirSync(OUT, { recursive: true });
 const ids = readdirSync(join(ROOT, 'templates')).filter((d) => existsSync(join(ROOT, 'templates', d, 'template.html')) && /^U\d+$/.test(d));
 
-const pw = await import('/Users/shaansisodia/.npm-global/lib/node_modules/@playwright/cli/node_modules/playwright/index.js');
+const pw = await import(process.env.PLAYWRIGHT_MODULE || 'playwright');  // `npm i -D playwright`, or point PLAYWRIGHT_MODULE at an install
 const chromium = pw.chromium || pw.default?.chromium;
 const b = await chromium.launch({ headless: true, executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' });
 const page = await b.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
